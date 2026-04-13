@@ -2,8 +2,8 @@ import { memo } from 'react'
 import './StudentCard.css'
 
 function StudentCard({ course, onRemove }) {
-  const atRisk = course.grade < 50 && course.attending === false
-  const eligibleForDistinction = course.grade >= 85
+  const atRisk = course.grade <= 5 && course.attending === false
+  const eligibleForDistinction = course.grade >= 9
 
   return (
     <article className="course-card">
@@ -33,7 +33,7 @@ function StudentCard({ course, onRemove }) {
 
       <div className="card-footer">
         <span className="course-credits-badge">{course.credits} cr</span>
-        <span className="course-grade">Grade: {course.grade}%</span>
+        <span className="course-grade">Grade: {course.grade}</span>
         <span className={`attending-badge ${course.attending ? 'attending-yes' : 'attending-no'}`}>
           {course.attending ? 'Attending' : 'Not Attending'}
         </span>

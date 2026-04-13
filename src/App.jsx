@@ -9,15 +9,15 @@ const STUDENT = {
 }
 
 const SAMPLE_COURSES = [
-  { id: 1, name: 'Client Side Programming', credits: 6, grade: 88, attending: true,  difficulty: 'Moderate' },
-  { id: 2, name: 'Data Mining',             credits: 6, grade: 74, attending: true,  difficulty: 'Hard'     },
-  { id: 3, name: 'Software Engineering',    credits: 6, grade: 91, attending: true,  difficulty: 'Moderate' },
+  { id: 1, name: 'Client Side Programming', credits: 6, grade: 8, attending: true,  difficulty: 'Moderate' },
+  { id: 2, name: 'Data Mining',             credits: 6, grade: 7, attending: true,  difficulty: 'Hard'     },
+  { id: 3, name: 'Software Engineering',    credits: 6, grade: 9, attending: true,  difficulty: 'Moderate' },
 ]
 
 function App() {
   const [courses, setCourses] = useState(() => {
     try {
-      const saved = localStorage.getItem('sct-courses-v3')
+      const saved = localStorage.getItem('sct-courses-v4')
       return saved ? JSON.parse(saved) : SAMPLE_COURSES
     } catch {
       return SAMPLE_COURSES
@@ -25,7 +25,7 @@ function App() {
   })
 
   useEffect(() => {
-    localStorage.setItem('sct-courses-v3', JSON.stringify(courses))
+    localStorage.setItem('sct-courses-v4', JSON.stringify(courses))
   }, [courses])
 
   const totalCredits = courses.reduce((sum, c) => sum + Number(c.credits), 0)
