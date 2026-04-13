@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import './App.css'
-import StudentCard from './StudentCard'
-import RegisterCourse from './RegisterCourse'
+import StudentCard from './components/StudentCard'
+import RegisterCourse from './components/RegisterCourse'
 
 const STUDENT = {
   name: 'Vigan Sadiku',
@@ -23,7 +23,6 @@ function App() {
       return SAMPLE_COURSES
     }
   })
-  const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
     localStorage.setItem('sct-courses-v3', JSON.stringify(courses))
@@ -32,8 +31,7 @@ function App() {
   const totalCredits = courses.reduce((sum, c) => sum + Number(c.credits), 0)
 
   function handleRegister(courseData) {
-    setCourses([...courses, { id: Date.now(), ...courseData }])
-    setShowForm(false)
+    setCourses(prev => [...prev, { id: Date.now(), ...courseData }])
   }
 
   // Using the functional updater form of setCourses means this callback never
@@ -46,21 +44,12 @@ function App() {
     setCourses(prev => prev.filter(c => c.id !== id))
   }, [])
 
-  function handleOverlayClick(e) {
-    if (e.target === e.currentTarget) setShowForm(false)
-  }
-
   return (
     <div className="app">
       <header className="app-header">
-        <div className="header-top">
-          <div className="header-text">
-            <h1 className="app-title">Course Tracker</h1>
-            <p className="app-subtitle">Spring 2026</p>
-          </div>
-          <button className="btn-primary" onClick={() => setShowForm(true)}>
-            + Add Course
-          </button>
+        <div className="header-text">
+          <h1 className="app-title">Course Tracker</h1>
+          <p className="app-subtitle">Spring 2026</p>
         </div>
         <div className="stats-bar">
           <div className="stat">
@@ -83,29 +72,23 @@ function App() {
         <p className="student-caption">Enrolled courses for the Spring 2026 semester</p>
       </section>
 
-      <main className="courses-grid">
-        {courses.length === 0 && (
-          <div className="empty-state">
-            <p>No courses yet.</p>
-            <button className="btn-primary" onClick={() => setShowForm(true)}>Add your first course</button>
+      <div className="content-layout">
+        <main className="courses-section">
+          {courses.length === 0 && (
+            <p className="empty-state">No courses registered yet.</p>
+          )}
+          <div className="courses-grid">
+            {courses.map(course => (
+              <StudentCard key={course.id} course={course} onRemove={handleRemove} />
+            ))}
           </div>
-        )}
-        {courses.map(course => (
-          <StudentCard key={course.id} course={course} onRemove={handleRemove} />
-        ))}
-      </main>
+        </main>
 
-      {showForm && (
-        <div className="modal-overlay" onClick={handleOverlayClick}>
-          <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-            <div className="modal-header">
-              <h2 id="modal-title">Register Course</h2>
-              <button className="btn-icon" onClick={() => setShowForm(false)} aria-label="Close">×</button>
-            </div>
-            <RegisterCourse onRegister={handleRegister} />
-          </div>
-        </div>
-      )}
+        <aside className="register-aside">
+          <h2 className="register-title">Register Course</h2>
+          <RegisterCourse onRegister={handleRegister} />
+        </aside>
+      </div>
     </div>
   )
 }
