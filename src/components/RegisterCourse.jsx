@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './RegisterCourse.css'
 
-const EMPTY = { name: '', credits: '', grade: '', attending: true, difficulty: 'Moderate' }
+const EMPTY = { name: '', credits: 3, grade: 5, attending: true, difficulty: 'Moderate' }
 
 function RegisterCourse({ onRegister }) {
   const [form, setForm] = useState(EMPTY)
@@ -12,18 +12,6 @@ function RegisterCourse({ onRegister }) {
     nameInputRef.current?.focus()
   }, [])
 
-  function validate() {
-    const errs = {}
-    if (!form.name.trim()) {
-      errs.name = 'Course name cannot be empty.'
-    }
-    const g = Number(form.grade)
-    if (form.grade === '' || isNaN(g) || g < 5 || g > 10) {
-      errs.grade = 'Grade must be a number from 5 to 10.'
-    }
-    return errs
-  }
-
   function field(key, value) {
     setForm(prev => ({ ...prev, [key]: value }))
     if (errors[key]) setErrors(prev => ({ ...prev, [key]: undefined }))
@@ -31,9 +19,8 @@ function RegisterCourse({ onRegister }) {
 
   function handleSubmit(e) {
     e.preventDefault()
-    const errs = validate()
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs)
+    if (!form.name.trim()) {
+      setErrors({ name: 'Course name cannot be empty.' })
       return
     }
     onRegister({
@@ -65,26 +52,24 @@ function RegisterCourse({ onRegister }) {
 
       <label className="form-field">
         Credit Hours
-        <input
-          type="number"
-          min="1"
-          max="12"
-          value={form.credits}
-          onChange={e => field('credits', e.target.value)}
-          placeholder="6"
-        />
+        <select value={form.credits} onChange={e => field('credits', e.target.value)}>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
       </label>
 
       <label className="form-field">
         Current Grade
-        <input
-          type="number"
-          value={form.grade}
-          onChange={e => field('grade', e.target.value)}
-          placeholder="5 – 10"
-          className={errors.grade ? 'input-error' : ''}
-        />
-        {errors.grade && <span className="field-error">{errors.grade}</span>}
+        <select value={form.grade} onChange={e => field('grade', e.target.value)}>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
       </label>
 
       <label className="form-field attending-field">
