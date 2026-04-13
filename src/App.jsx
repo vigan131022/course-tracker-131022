@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import StudentCard from './StudentCard'
+import RegisterCourse from './RegisterCourse'
 
 const STUDENT = {
   name: 'Vigan Sadiku',
@@ -13,8 +14,6 @@ const SAMPLE_COURSES = [
   { id: 3, name: 'Software Engineering',    credits: 6, grade: 91, attending: true,  difficulty: 'Moderate' },
 ]
 
-const EMPTY_FORM = { name: '', credits: '', grade: '', attending: true, difficulty: 'Moderate' }
-
 function App() {
   const [courses, setCourses] = useState(() => {
     try {
@@ -25,7 +24,6 @@ function App() {
     }
   })
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState(EMPTY_FORM)
 
   useEffect(() => {
     localStorage.setItem('sct-courses-v3', JSON.stringify(courses))
@@ -33,18 +31,8 @@ function App() {
 
   const totalCredits = courses.reduce((sum, c) => sum + Number(c.credits), 0)
 
-  function handleAdd(e) {
-    e.preventDefault()
-    const newCourse = {
-      id: Date.now(),
-      name: form.name.trim(),
-      credits: Number(form.credits),
-      grade: Number(form.grade),
-      attending: form.attending,
-      difficulty: form.difficulty,
-    }
-    setCourses([...courses, newCourse])
-    setForm(EMPTY_FORM)
+  function handleRegister(courseData) {
+    setCourses([...courses, { id: Date.now(), ...courseData }])
     setShowForm(false)
   }
 
@@ -105,75 +93,10 @@ function App() {
         <div className="modal-overlay" onClick={handleOverlayClick}>
           <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
             <div className="modal-header">
-              <h2 id="modal-title">Add New Course</h2>
+              <h2 id="modal-title">Register Course</h2>
               <button className="btn-icon" onClick={() => setShowForm(false)} aria-label="Close">×</button>
             </div>
-            <form onSubmit={handleAdd} className="course-form">
-              <label className="form-field">
-                Course Name
-                <input
-                  required
-                  value={form.name}
-                  onChange={e => setForm({ ...form, name: e.target.value })}
-                  placeholder="e.g. Data Structures"
-                />
-              </label>
-              <div className="form-row">
-                <label className="form-field">
-                  Credits
-                  <input
-                    required
-                    type="number"
-                    min="1"
-                    max="6"
-                    value={form.credits}
-                    onChange={e => setForm({ ...form, credits: e.target.value })}
-                    placeholder="3"
-                  />
-                </label>
-                <label className="form-field">
-                  Grade (%)
-                  <input
-                    required
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={form.grade}
-                    onChange={e => setForm({ ...form, grade: e.target.value })}
-                    placeholder="85"
-                  />
-                </label>
-              </div>
-              <div className="form-row">
-                <label className="form-field">
-                  Difficulty
-                  <select
-                    value={form.difficulty}
-                    onChange={e => setForm({ ...form, difficulty: e.target.value })}
-                  >
-                    <option>Easy</option>
-                    <option>Moderate</option>
-                    <option>Hard</option>
-                  </select>
-                </label>
-                <label className="form-field attending-field">
-                  Attending
-                  <div className="toggle-row">
-                    <input
-                      type="checkbox"
-                      id="attending-toggle"
-                      checked={form.attending}
-                      onChange={e => setForm({ ...form, attending: e.target.checked })}
-                    />
-                    <span>{form.attending ? 'Yes' : 'No'}</span>
-                  </div>
-                </label>
-              </div>
-              <div className="form-actions">
-                <button type="button" className="btn-ghost" onClick={() => setShowForm(false)}>Cancel</button>
-                <button type="submit" className="btn-primary">Add Course</button>
-              </div>
-            </form>
+            <RegisterCourse onRegister={handleRegister} />
           </div>
         </div>
       )}
