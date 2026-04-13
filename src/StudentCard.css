@@ -1,0 +1,40 @@
+.indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.indicator {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+}
+
+.indicator-risk::before       { content: '⚠'; }
+.indicator-distinction::before { content: '★'; }
+
+.indicator-risk {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.indicator-distinction {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+@media (prefers-color-scheme: dark) {
+  .indicator-risk {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+  }
+  .indicator-distinction {
+    background: rgba(234, 179, 8, 0.2);
+    color: #fde047;
+  }
+}

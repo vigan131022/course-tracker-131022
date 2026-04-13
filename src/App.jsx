@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import StudentCard from './StudentCard'
 
 const STUDENT = {
   name: 'Vigan Sadiku',
@@ -96,26 +97,7 @@ function App() {
           </div>
         )}
         {courses.map(course => (
-          <article key={course.id} className="course-card">
-            <div className="card-top">
-              <span className={`difficulty-badge difficulty-${course.difficulty.toLowerCase()}`}>
-                {course.difficulty}
-              </span>
-              <button
-                className="btn-remove"
-                onClick={() => handleRemove(course.id)}
-                aria-label={`Remove ${course.name}`}
-              >×</button>
-            </div>
-            <h2 className="course-name">{course.name}</h2>
-            <div className="card-footer">
-              <span className="course-credits-badge">{course.credits} cr</span>
-              <span className="course-grade">Grade: {course.grade}%</span>
-              <span className={`attending-badge ${course.attending ? 'attending-yes' : 'attending-no'}`}>
-                {course.attending ? 'Attending' : 'Not Attending'}
-              </span>
-            </div>
-          </article>
+          <StudentCard key={course.id} course={course} onRemove={handleRemove} />
         ))}
       </main>
 
