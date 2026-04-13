@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './RegisterCourse.css'
 
 const EMPTY = { name: '', credits: '', grade: '', attending: true, difficulty: 'Moderate' }
@@ -6,6 +6,11 @@ const EMPTY = { name: '', credits: '', grade: '', attending: true, difficulty: '
 function RegisterCourse({ onRegister }) {
   const [form, setForm] = useState(EMPTY)
   const [errors, setErrors] = useState({})
+  const nameInputRef = useRef(null)
+
+  useEffect(() => {
+    nameInputRef.current?.focus()
+  }, [])
 
   function validate() {
     const errs = {}
@@ -48,6 +53,7 @@ function RegisterCourse({ onRegister }) {
       <label className="form-field">
         Course Name
         <input
+          ref={nameInputRef}
           type="text"
           value={form.name}
           onChange={e => field('name', e.target.value)}

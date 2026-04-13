@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import './App.css'
 import StudentCard from './StudentCard'
 import RegisterCourse from './RegisterCourse'
@@ -36,9 +36,15 @@ function App() {
     setShowForm(false)
   }
 
-  function handleRemove(id) {
-    setCourses(courses.filter(c => c.id !== id))
-  }
+  // Using the functional updater form of setCourses means this callback never
+  // needs to read the courses variable directly, so the dependency array stays
+  // empty and the function reference is stable across renders. That stability
+  // is what lets React.memo on StudentCard actually skip re-renders — if this
+  // were a plain function, every parent render would hand every card a new
+  // prop reference and memo would never help.
+  const handleRemove = useCallback((id) => {
+    setCourses(prev => prev.filter(c => c.id !== id))
+  }, [])
 
   function handleOverlayClick(e) {
     if (e.target === e.currentTarget) setShowForm(false)

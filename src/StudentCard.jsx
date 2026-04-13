@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import './StudentCard.css'
 
 function StudentCard({ course, onRemove }) {
@@ -41,4 +42,4 @@ function StudentCard({ course, onRemove }) {
   )
 }
 
-export default StudentCard
+export default memo(StudentCard)
